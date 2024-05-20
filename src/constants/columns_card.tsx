@@ -12,8 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { IOHistory } from "@/interfaces/models/history";
 
-export const columnsCard: ColumnDef<ICard>[] = [
+export const columnsCard: ColumnDef<ICard | IOHistory | any>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -37,52 +38,50 @@ export const columnsCard: ColumnDef<ICard>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
+    accessorKey: "uid",
     header: "Mã thẻ",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    cell: ({ row }) => <div className="capitalize">{row.getValue("uid")}</div>,
   },
   {
-    accessorKey: "status",
+    accessorKey: "card_type",
     header: "Loại thẻ",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("card_type")}</div>
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "owner_name",
     header: "Tên chủ thẻ",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("owner_name")}</div>
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "created_at",
     header: "Ngày đăng ký",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("created_at")}</div>
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "vehicle_type",
     header: "Loại xe",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("vehicle_type")}</div>
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "license_plate",
     header: "Biển số xe",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("license_plate")}</div>
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "exp_date",
     header: "Ngày hết hạn",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("exp_date")}</div>
     ),
   },
 

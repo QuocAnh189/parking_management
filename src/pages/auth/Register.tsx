@@ -1,18 +1,20 @@
 //hook
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 //asset
 import imageLogin from "@/assets/login.png";
 
 //redux
 import { useSignUpMutation } from "@/redux/services/auth";
-import { setUser } from "@/redux/slices/user";
-import { useAppDispatch } from "@/redux/hooks";
+
+//compnnets
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const { toast } = useToast();
 
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -21,11 +23,21 @@ const RegisterPage = () => {
   const [Register, { isLoading }] = useSignUpMutation();
 
   const handleRegister = async () => {
-    const result = await Register({ email, username, password }).unwrap();
+    try {
+      const result = await Register({ email, username, password }).unwrap();
 
-    if (true) {
-      dispatch(setUser(result));
-      navigate("/main");
+      if (result) {
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+          ),
+          title: "Register",
+          description: "SignUp successfully, please Login",
+          duration: 3000,
+        });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

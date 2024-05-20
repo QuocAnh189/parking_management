@@ -14,12 +14,14 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setUser } from "@/redux/slices/user";
 
 const Layout = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const user = useAppSelector((state) => state.user.user);
 
   const handleLogout = () => {
     dispatch(setUser(null));
@@ -38,7 +40,7 @@ const Layout = () => {
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-2 hover:cursor-pointer">
               <AvatarUser />
-              <p>Anh Quốc</p>
+              <p>{user?.username}</p>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-30">

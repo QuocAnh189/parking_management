@@ -1,3 +1,4 @@
+import { ICard } from "@/interfaces/models/card";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiCard = createApi({
@@ -6,32 +7,50 @@ export const apiCard = createApi({
     baseUrl: import.meta.env.VITE_API_URL,
   }),
   keepUnusedDataFor: 20,
-
+  tagTypes: ["Card"],
   endpoints: (builder) => ({
-    signUp: builder.mutation<any, any>({
+    getAllCards: builder.query<ICard[], void>({
+      query: () => ({
+        url: "/card/",
+        method: "GET",
+      }),
+      transformResponse: (response: any) => {
+        return response.cards;
+      },
+      providesTags: ["Card"],
+    }),
+
+    getCard: builder.query<any, string>({
+      query: (id) => ({
+        url: `/card/${id}/`,
+        method: "GET",
+      }),
+      providesTags: ["Card"],
+    }),
+
+    createCard: builder.mutation<any, ICard>({
       query: (data) => ({
-        url: "/card",
+        url: "/card/",
         method: "POST",
         body: data,
       }),
-      transformResponse: (response: any) => response.data,
+      invalidatesTags: ["Card"],
     }),
 
-    signIn: builder.mutation<any, any>({
-      query: (data) => ({
-        url: "/card/:id",
+    updateCard: builder.mutation<any, { id: string; data: ICard }>({
+      query: ({ id, data }) => ({
+        url: `/card/${id}/`,
         method: "PUT",
         body: data,
       }),
-      transformResponse: (response: any) => response.data,
-    }),
-
-    getProfile: builder.query<any, any>({
-      query: () => ({
-        url: "/card",
-        method: "POST",
-      }),
-      transformResponse: (response: any) => response.data,
+      invalidatesTags: ["Card"],
     }),
   }),
 });
+
+export const {
+  useGetAllCardsQuery,
+  useGetCardQuery,
+  useCreateCardMutation,
+  useUpdateCardMutation,
+} = apiCard;

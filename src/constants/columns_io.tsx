@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { ICard } from "@/interfaces/systems";
+import { ICard } from "@/interfaces/models/card";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { IOHistory } from "@/interfaces/models/history";
 
-export const columnsIO: ColumnDef<ICard>[] = [
+export const columnsIO: ColumnDef<ICard | IOHistory>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -37,45 +38,36 @@ export const columnsIO: ColumnDef<ICard>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
+    accessorKey: "uid",
     header: "Mã thẻ",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    cell: ({ row }) => <div className="capitalize">{row.getValue("uid")}</div>,
   },
   {
-    accessorKey: "status",
+    accessorKey: "card_type",
     header: "Loại thẻ",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("card_type")}</div>
     ),
   },
   {
-    accessorKey: "status",
-    header: "Tên chủ thẻ",
+    accessorKey: "created_at",
+    header: "Giờ vào/ra",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("created_at")}</div>
     ),
   },
   {
-    accessorKey: "status",
-    header: "Giờ vào",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "status",
+    accessorKey: "vehicle_type",
     header: "Loại xe",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("vehicle_type")}</div>
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "crop_url",
     header: "Biển số xe",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("crop_url")}</div>
     ),
   },
 
@@ -83,8 +75,6 @@ export const columnsIO: ColumnDef<ICard>[] = [
     id: "actions",
     enableHiding: false,
     cell: () => {
-      // const payment = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -13,9 +13,13 @@ const RFID = lazy(() => import("./pages/expamle_rfid"));
 //component
 import Loader from "./components/common/Loader";
 
+//toast
+import { Toaster } from "@/components/ui/toaster";
+
 function App() {
   return (
     <BrowserRouter>
+      <Toaster />
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<LoginPage />} />

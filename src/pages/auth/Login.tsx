@@ -1,12 +1,18 @@
+//hook
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-import imageLogin from "@/assets/login.png";
 
 //redux
 import { useAppDispatch } from "@/redux/hooks";
 import { useSignInMutation } from "@/redux/services/auth";
 import { setUser } from "@/redux/slices/user";
+
+//component
+import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
+
+//assets
+import imageLogin from "@/assets/login.png";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -14,22 +20,35 @@ const LoginPage = () => {
 
   const [Login, { isLoading }] = useSignInMutation();
 
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
   const handleLogin = async () => {
     try {
       const result = await Login({ email, password }).unwrap();
 
       if (result) {
-        dispatch(setUser(result));
+        dispatch(setUser(result.user));
+        localStorage.setItem(
+          "token",
+          JSON.stringify({
+            acessTolken: result.access,
+            refreshToken: result.refresh,
+          })
+        );
         navigate("/main");
       }
     } catch (e) {
-      navigate("/main");
-      console.log(e);
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        title: "Login",
+        description: "Login fail, please try again",
+        duration: 3000,
+      });
     }
   };
-
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

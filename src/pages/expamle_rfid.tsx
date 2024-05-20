@@ -3,6 +3,7 @@ import { useState } from "react";
 import { RFIDReaderInput } from "rfid-reader-input";
 
 const RFID = () => {
+  console.log("render");
   const [isHover, setIsHover] = useState<boolean>(false);
 
   const handleMouseEnter = () => {

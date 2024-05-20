@@ -1,38 +1,28 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 
 // //service
 import { apiAuth } from "./services/auth";
+import { apiCard } from "./services/card";
+import { apiInOut } from "./services/in_out";
 
 // // slices
 import userReducer, { UserSliceKey } from "./slices/user";
 
-const persistConfig = {
-  key: "root",
-  storage: storage,
-};
-
-const combinedReducer = combineReducers({
-  [apiAuth.reducerPath]: apiAuth.reducer,
-
-  [UserSliceKey]: userReducer,
-});
-
-const rootReducer = (state: any, action: any) => {
-  return combinedReducer(state, action);
-};
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 const store = configureStore({
-  reducer: persistedReducer,
+  reducer: {
+    [apiAuth.reducerPath]: apiAuth.reducer,
+    [apiCard.reducerPath]: apiCard.reducer,
+    [apiInOut.reducerPath]: apiInOut.reducer,
+
+    [UserSliceKey]: userReducer,
+  },
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
       immutableCheck: false,
-    }).concat([apiAuth.middleware]),
+    }).concat([apiAuth.middleware, apiCard.middleware, apiInOut.middleware]),
 });
 
 setupListeners(store.dispatch);
@@ -40,5 +30,3 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;
-
-export const persistor = persistStore(store);

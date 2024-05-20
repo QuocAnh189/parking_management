@@ -15,14 +15,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-//shadcn
+//component
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   Table,
@@ -33,14 +32,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { ChevronDown } from "lucide-react";
-import { data } from "@/data";
+//interface
 import { columnsIO } from "@/constants/columns_io";
+import { IOHistory } from "@/interfaces/models/history";
 
-//component
-import ButtonAdd from "./Modal";
+interface Props {
+  ios: IOHistory[];
+}
+const DataTableManageIO = (props: Props) => {
+  const { ios } = props;
 
-const DataTableManageIO = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -50,7 +51,7 @@ const DataTableManageIO = () => {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: ios,
     columns: columnsIO,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -72,21 +73,15 @@ const DataTableManageIO = () => {
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Tìm kiếm theo tên chủ thẻ..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Tìm kiếm theo tên uid thẻ..."
+          value={(table.getColumn("uid")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("uid")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <div className="space-x-5">
-          <ButtonAdd />
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {table
                 .getAllColumns()

@@ -1,6 +1,5 @@
-"use client";
-
-import * as React from "react";
+//hook
+import { useState } from "react";
 
 //table
 import {
@@ -15,14 +14,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-//shadcn
+//component
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   Table,
@@ -32,25 +30,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { ChevronDown } from "lucide-react";
-import { data } from "@/data";
-import { columnsCard } from "@/constants/columns_card";
-
-//component
 import ButtonAdd from "./Modal";
 
-const DataTableManageCard = () => {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+//constant
+import { columnsCard } from "@/constants/columns_card";
+
+//interface
+import { ICard } from "@/interfaces/models/card";
+
+interface Props {
+  cards: ICard[];
+}
+
+const DataTableManageCard = (props: Props) => {
+  const { cards } = props;
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data,
+    data: cards,
     columns: columnsCard,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -73,20 +73,17 @@ const DataTableManageCard = () => {
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Tìm kiếm theo tên chủ thẻ..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("owner_name")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("owner_name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <div className="space-x-5">
           <ButtonAdd />
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {table
                 .getAllColumns()

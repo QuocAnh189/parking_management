@@ -1,4 +1,4 @@
-import { LoginPayload } from "@/interfaces/variable";
+import { LoginPayload, LoginResponse } from "@/interfaces/variable";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiAuth = createApi({
@@ -15,16 +15,14 @@ export const apiAuth = createApi({
         method: "POST",
         body: data,
       }),
-      transformResponse: (response: any) => response.data,
     }),
 
-    signIn: builder.mutation<any, LoginPayload>({
+    signIn: builder.mutation<LoginResponse, LoginPayload>({
       query: (data) => ({
         url: "/auth/login",
         method: "POST",
         body: data,
       }),
-      transformResponse: (response: any) => response.data,
     }),
 
     getProfile: builder.query<any, void>({
