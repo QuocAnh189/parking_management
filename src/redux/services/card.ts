@@ -37,6 +37,15 @@ export const apiCard = createApi({
       invalidatesTags: ["Card"],
     }),
 
+    createCardDay: builder.mutation<any, Partial<ICard>>({
+      query: (data) => ({
+        url: "/card/guess",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Card"],
+    }),
+
     updateCard: builder.mutation<any, { id: string; data: ICard }>({
       query: ({ id, data }) => ({
         url: `/card/${id}/`,
@@ -52,5 +61,6 @@ export const {
   useGetAllCardsQuery,
   useGetCardQuery,
   useCreateCardMutation,
+  useCreateCardDayMutation,
   useUpdateCardMutation,
 } = apiCard;

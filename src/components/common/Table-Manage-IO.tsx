@@ -36,6 +36,11 @@ import {
 import { columnsIO } from "@/constants/columns_io";
 import { IOHistory } from "@/interfaces/models/history";
 
+//redux
+import { useDeleteAllInOutMutation } from "@/redux/services/in_out";
+import { toast } from "../ui/use-toast";
+import { cn } from "@/lib/utils";
+import { Skeleton } from "../ui/skeleton";
 interface Props {
   ios: IOHistory[];
 }
@@ -46,6 +51,8 @@ const DataTableManageIO = (props: Props) => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  const [DeleteInOut, { isLoading }] = useDeleteAllInOutMutation();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -69,17 +76,30 @@ const DataTableManageIO = (props: Props) => {
     },
   });
 
+  const handleDelete = async () => {
+    try {
+      const result = await DeleteInOut().unwrap();
+      if (result) {
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+          ),
+          title: "Login",
+          description: "Login fail, please try again",
+          duration: 3000,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
-        <Input
-          placeholder="Tìm kiếm theo tên uid thẻ..."
-          value={(table.getColumn("uid")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("uid")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <Button disabled={isLoading} onClick={handleDelete}>
+          {isLoading ? <Skeleton /> : "Delete All"}
+        </Button>
         <div className="space-x-5">
           <DropdownMenu>
             <DropdownMenuContent align="end">
@@ -130,6 +150,11 @@ const DataTableManageIO = (props: Props) => {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={
+                    row.getValue("type") === "IN"
+                      ? "bg-green-300"
+                      : "bg-yellow-400"
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

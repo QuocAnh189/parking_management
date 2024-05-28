@@ -46,6 +46,7 @@ const LoginPage = () => {
         title: "Login",
         description: "Login fail, please try again",
         duration: 3000,
+        variant: "destructive",
       });
     }
   };

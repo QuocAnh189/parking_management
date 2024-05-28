@@ -1,6 +1,8 @@
+import { ECardType, EVehicleType } from "../models/card";
 import { IOHistory } from "../models/history";
 import { IUser } from "../models/user";
 import { ICard } from "../systems";
+import { EInOut } from "../models/history";
 
 export interface LoginPayload {
   email: string;
@@ -26,8 +28,12 @@ export interface RegisterResponse {
 export interface InOutPayload {}
 
 export interface InOutResponse {
-  message: string;
-  card_info: ICard;
-  crop_image: string;
-  io: IOHistory;
+  card_type: ECardType;
+  created_at: any;
+  crop_url: string;
+  img_url: string;
+  type: EInOut;
+  uid: string;
+  vehicle_type: EVehicleType;
+  plate_number: string;
 }

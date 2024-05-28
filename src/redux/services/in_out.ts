@@ -36,6 +36,9 @@ export const apiInOut = createApi({
         method: "POST",
         body: data,
       }),
+      // transformErrorResponse: (response: any) => {
+      //   response.message;
+      // },
       invalidatesTags: ["InOut"],
     }),
 
@@ -47,6 +50,14 @@ export const apiInOut = createApi({
       }),
       invalidatesTags: ["InOut"],
     }),
+
+    deleteAllInOut: builder.mutation<InOutResponse, void>({
+      query: () => ({
+        url: "/in_out/all_io",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["InOut"],
+    }),
   }),
 });
 
@@ -55,4 +66,5 @@ export const {
   useGetInOutByUidQuery,
   useCheckInMutation,
   useCheckOutMutation,
+  useDeleteAllInOutMutation,
 } = apiInOut;

@@ -12,6 +12,8 @@ import {
 import ModalMonth from "./Modal-Month";
 import ModalDay from "./Modal-Day";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 //icon
 import { Plus } from "lucide-react";
@@ -20,12 +22,18 @@ import { Plus } from "lucide-react";
 import { ICard, initCard } from "@/interfaces/models/card";
 
 //redux
-import { useCreateCardMutation } from "@/redux/services/card";
+import {
+  useCreateCardMutation,
+  useCreateCardDayMutation,
+} from "@/redux/services/card";
 import { useState } from "react";
 
 const ButtonAdd = () => {
   const [formCard, setFormCard] = useState<ICard | any>(initCard);
-  const [createCard, { isLoading }] = useCreateCardMutation();
+  const [createCardMonth, { isLoading: isLoadingMonth }] =
+    useCreateCardMutation();
+  const [createCardDay, { isLoading: isLoadingDay }] =
+    useCreateCardDayMutation();
 
   const handleChangeForm = (name: string, value: any) => {
     setFormCard({ ...formCard, [name]: value });
@@ -33,11 +41,31 @@ const ButtonAdd = () => {
 
   const handleSubmit = async () => {
     try {
-      const result = await createCard(formCard).unwrap();
+      const result =
+        formCard.card_type === "MONTH"
+          ? await createCardMonth(formCard).unwrap()
+          : await createCardDay(formCard).unwrap();
       if (result) {
-        console.log(result);
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4 bg-green-400"
+          ),
+          title: "Create Successfully",
+          description: "Let checkin now",
+          duration: 3000,
+        });
       }
-    } catch (e) {}
+    } catch (e) {
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        title: "Create Fail",
+        description: "Something went wrong",
+        duration: 3000,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -57,7 +85,9 @@ const ButtonAdd = () => {
           className="w-full"
           onValueChange={(value) => {
             setFormCard(
-              value === "month" ? initCard : { uid: "", vehicle_type: "" }
+              value === "month"
+                ? initCard
+                : { uid: "", vehicle_type: "", card_type: "DAY" }
             );
           }}
         >
@@ -77,8 +107,12 @@ const ButtonAdd = () => {
           </TabsContent>
         </Tabs>
         <DialogFooter>
-          <Button disabled={isLoading} type="button" onClick={handleSubmit}>
-            {isLoading ? "Loading" : "Thêm"}
+          <Button
+            disabled={isLoadingMonth || isLoadingDay}
+            type="button"
+            onClick={handleSubmit}
+          >
+            {isLoadingMonth || isLoadingDay ? "Loading" : "Thêm"}
           </Button>
         </DialogFooter>
       </DialogContent>

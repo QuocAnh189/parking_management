@@ -2,15 +2,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-//asset
-import imageLogin from "@/assets/login.png";
+//compnnets
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 //redux
 import { useSignUpMutation } from "@/redux/services/auth";
 
-//compnnets
-import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
+//asset
+import imageLogin from "@/assets/login.png";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -37,6 +37,15 @@ const RegisterPage = () => {
         });
       }
     } catch (e) {
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        title: "Register Fail",
+        description: "Some thing went wrong, please try again",
+        duration: 3000,
+        variant: "destructive",
+      });
       console.log(e);
     }
   };

@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IOHistory } from "@/interfaces/models/history";
+import { ECardType, EVehicleType } from "@/interfaces/models/card";
+import dayjs from "dayjs";
 
 export const columnsCard: ColumnDef<ICard | IOHistory | any>[] = [
   {
@@ -46,7 +48,11 @@ export const columnsCard: ColumnDef<ICard | IOHistory | any>[] = [
     accessorKey: "card_type",
     header: "Loại thẻ",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("card_type")}</div>
+      <div className="capitalize">
+        {row.getValue("card_type") === ECardType.MONTH
+          ? "Thẻ tháng"
+          : "Thẻ ngày"}
+      </div>
     ),
   },
   {
@@ -67,7 +73,11 @@ export const columnsCard: ColumnDef<ICard | IOHistory | any>[] = [
     accessorKey: "vehicle_type",
     header: "Loại xe",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("vehicle_type")}</div>
+      <div className="capitalize">
+        {row.getValue("vehicle_type") === EVehicleType.MOTORBIKE
+          ? "Xe gắn máy"
+          : "Xe ô tô"}
+      </div>
     ),
   },
   {
@@ -81,7 +91,9 @@ export const columnsCard: ColumnDef<ICard | IOHistory | any>[] = [
     accessorKey: "exp_date",
     header: "Ngày hết hạn",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("exp_date")}</div>
+      <div className="capitalize">
+        {dayjs(row.getValue("exp_date")).format("DD/MM/YYYY")}
+      </div>
     ),
   },
 

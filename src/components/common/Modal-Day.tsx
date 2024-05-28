@@ -86,8 +86,8 @@ const ModalDay = (props: Props) => {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Chọn loại xe</SelectLabel>
-              <SelectItem value="apple">Xe gắn máy</SelectItem>
-              <SelectItem value="banana">Xe ô tô</SelectItem>
+              <SelectItem value={EVehicleType.MOTORBIKE}>Xe gắn máy</SelectItem>
+              <SelectItem value={EVehicleType.CAR}>Xe ô tô</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

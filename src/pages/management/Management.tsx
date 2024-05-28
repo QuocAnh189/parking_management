@@ -1,8 +1,11 @@
+//hook
+import { useEffect } from "react";
+
 //component
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DataTableManageCard from "@/components/common/Table-Manage-Card";
 import DataTableManageIO from "@/components/common/Table-Manage-IO";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 //redux
 import { useGetAllCardsQuery } from "@/redux/services/card";
@@ -30,10 +33,10 @@ const ManagementPage = () => {
           <TabsTrigger value="in_out_put">Danh sách vào ra</TabsTrigger>
         </TabsList>
         <TabsContent value="card">
-          <DataTableManageCard cards={cards!} />
+          {cards && <DataTableManageCard cards={cards!} />}
         </TabsContent>
         <TabsContent value="in_out_put">
-          <DataTableManageIO ios={ios!} />
+          {ios && <DataTableManageIO ios={ios.slice(0).reverse()!} />}
         </TabsContent>
       </Tabs>
     </div>
